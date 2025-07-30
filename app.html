@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Moodboard Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(90deg, #8e2de2, #4a00e0);
+      color: white;
+    }
+    .card {
+      transition: transform 0.3s ease-in-out;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-6">
+
+  <h1 class="text-4xl font-bold mb-6">🎨 AI Moodboard Generator</h1>
+
+  <div class="flex gap-3 mb-6">
+    <input
+      id="moodInput"
+      type="text"
+      placeholder="Enter a mood..."
+      class="px-4 py-2 rounded-lg text-black focus:outline-none"
+    />
+    <button
+      onclick="generateMoodboard()"
+      class="bg-white text-purple-600 px-4 py-2 rounded-lg hover:bg-gray-200"
+    >
+      Generate
+    </button>
+  </div>
+
+  <div id="imageGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-4xl"></div>
+
+  <script>
+    async function generateMoodboard() {
+      const mood = document.getElementById('moodInput').value;
+      const apiKey = "K4Yly-sjS6D2K0W2HThBVJOW5uZ0rf44cZ-LV4tg_dc"; // Replace with your Unsplash API key
+      const url = `https://api.unsplash.com/search/photos?query=${mood}&per_page=9&client_id=${apiKey}`;
+
+      const res = await fetch(url);
+      const data = await res.json();
+      const imageGrid = document.getElementById('imageGrid');
+      imageGrid.innerHTML = "";
+
+      data.results.forEach(img => {
+        const imgElement = document.createElement('img');
+        imgElement.src = img.urls.small;
+        imgElement.alt = img.alt_description;
+        imgElement.className = "card rounded-xl shadow-lg";
+        imageGrid.appendChild(imgElement);
+      });
+    }
+  </script>
+
+</body>
+</html>
